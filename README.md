@@ -57,4 +57,8 @@ If you wish to disable setting the lock as active, simply set the second paramet
 
 The notice will be displayed that someone else has control already.
 
-If you are using the form on the page and someone else takes control from the WP Dashboard area (/wp-admin/), the notice will be displayed within 15 seconds and the form will be hidden from view.
+If you are using the form on the singular page and someone else takes control from the WP Dashboard area (/wp-admin/), the notice will be displayed within 15 seconds and the form will be hidden from view.
+
+## What's next
+
+* AJAX loading of post locking status for list notices (`bpl_post_lock_frontend_list_notice( $post_id )`)
