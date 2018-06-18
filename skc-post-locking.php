@@ -159,13 +159,13 @@ function skc_post_lock_frontend_notice( $post_id ) {
 		}
 	}
 	?>
-	<div id="post-lock-dialog" class="<?php echo esc_attr( $hidden ); ?>">
+	<div id="skc_post_locking_dialog" class="<?php echo esc_attr( $hidden ); ?>">
 		<?php skc_post_lock_notice_text( $display_name_role ); ?>
 	</div>
 
-	<input type="hidden" id="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'heartbeat-nonce' ) ); ?>" />
-	<input type="hidden" id="post_ID" value="<?php echo esc_attr( $post_id ); ?>" />
-	<input type="hidden" id="active_post_lock" value="<?php echo esc_attr( implode( ':', $active_post_lock ) ); ?>" />
+	<input type="hidden" id="skc_post_locking_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'heartbeat-nonce' ) ); ?>" />
+	<input type="hidden" id="skc_post_locking_post_id" value="<?php echo esc_attr( $post_id ); ?>" />
+	<input type="hidden" id="skc_post_locking_active" value="<?php echo esc_attr( implode( ':', $active_post_lock ) ); ?>" />
 	<?php
 
 	return $is_locked;
@@ -193,7 +193,7 @@ function skc_post_lock_frontend_list_notice( $post_id ) {
 	if ( false !== $display_name_role ) {
 		$is_locked = true;
 		?>
-		<div class="post-lock-list-dialog">
+		<div class="skc-post-locking-list-dialog">
 			<?php skc_post_lock_notice_text( $display_name_role ); ?>
 		</div>
 		<?php
@@ -211,7 +211,7 @@ function skc_post_lock_frontend_list_notice( $post_id ) {
 function skc_post_lock_notice_text( $display_name_role ) {
 
 	printf(
-		'<span class="user-display-name">%1$s</span> (<span class="user-role">%2$s</span>) %3$s.',
+		'<span class="skc-post-locking-user-display-name">%1$s</span> (<span class="skc-post-locking-user-role">%2$s</span>) %3$s.',
 		esc_html( $display_name_role['display_name'] ),
 		esc_html( $display_name_role['role'] ),
 		esc_html__( 'is editing', 'skc-post-locking' )
