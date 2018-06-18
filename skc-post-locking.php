@@ -86,6 +86,16 @@ function skc_post_lock_get_display_name_role( $user_id ) {
 		'role'         => $role_text,
 	);
 
+	/**
+	 * Filter the display name and role of user who has locked the post.
+	 *
+	 * @param array $display_name_role Display name and role of user.
+	 * @param int   $user_id           User ID.
+	 *
+	 * @since 1.0.0
+	 */
+	$display_name_role = apply_filters( 'skc_post_locking_display_name_role', $display_name_role, $user_id );
+
 	return $display_name_role;
 
 }
@@ -98,6 +108,10 @@ function skc_post_lock_get_display_name_role( $user_id ) {
  * @return array|false Display Name / Role if post is locked, false if it is not locked.
  */
 function skc_post_lock_get_display_name_role_from_post( $post_id ) {
+
+	// Include necessary files.
+	require_once ABSPATH . 'wp-admin/includes/post.php';
+	require_once ABSPATH . 'wp-admin/includes/misc.php';
 
 	/**
 	 * Check if the post is locked.
