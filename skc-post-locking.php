@@ -225,10 +225,16 @@ function skc_post_lock_frontend_list_notice( $post_id ) {
  */
 function skc_post_lock_notice_text( $display_name_role ) {
 
+	$role = '';
+
+	if ( ! empty( $display_name_role['role'] ) {
+		$role = sprintf( '(%s)', $display_name_role['role'] ); 
+	}
+
 	printf(
-		'<span class="skc-post-locking-user-display-name">%1$s</span> (<span class="skc-post-locking-user-role">%2$s</span>) %3$s.',
+		'<span class="skc-post-locking-user-display-name">%1$s</span> <span class="skc-post-locking-user-role">%2$s</span> %3$s.',
 		esc_html( $display_name_role['display_name'] ),
-		esc_html( $display_name_role['role'] ),
+		esc_html( $role ),
 		esc_html__( 'is editing', 'skc-post-locking' )
 	);
 
