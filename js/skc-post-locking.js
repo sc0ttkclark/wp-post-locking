@@ -47,8 +47,8 @@
 					}
 
 					// Set user fields.
-					$( '.user-display-name', wrap ).text( received.lock_error.display_name );
-					$( '.user-role', wrap ).text( received.lock_error.role );
+					$( '.skc-post-locking-user-display-name', wrap ).text( received.lock_error.display_name );
+					$( '.skc-post-locking-user-role', wrap ).text( received.lock_error.role );
 
 					// Hide ACF form on page.
 					$( '.acf-form' ).addClass( 'hidden' );
