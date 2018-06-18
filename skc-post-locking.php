@@ -119,11 +119,12 @@ function skc_post_lock_get_display_name_role_from_post( $post_id ) {
 /**
  * Render the post locking frontend notice.
  *
- * @param int $post_id Post ID.
+ * @param int  $post_id               Post ID.
+ * @param bool $set_lock_if_logged_in Whether to set the lock as active if the user is logged in.
  *
  * @return bool Whether the post is currenty locked by another user.
  */
-function skc_post_lock_frontend_notice( $post_id ) {
+function skc_post_lock_frontend_notice( $post_id, $set_lock_if_logged_in = true ) {
 
 	wp_register_script( 'skc-post-locking', plugins_url( 'js/skc-post-locking.js', __FILE__ ), array( 'jquery' ), '1.0', true );
 	wp_enqueue_script( 'skc-post-locking' );
@@ -154,7 +155,7 @@ function skc_post_lock_frontend_notice( $post_id ) {
 			'role'         => '',
 		);
 
-		if ( is_user_logged_in() ) {
+		if ( is_user_logged_in() && $set_lock_if_logged_in ) {
 			$active_post_lock = wp_set_post_lock( $post_id );
 		}
 	}
