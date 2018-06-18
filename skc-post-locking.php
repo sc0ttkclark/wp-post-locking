@@ -158,7 +158,7 @@ function skc_post_lock_frontend_notice( $post_id ) {
 			$active_post_lock = wp_set_post_lock( $post_id );
 		}
 	}
-?>
+	?>
 	<div id="post-lock-dialog" class="<?php echo esc_attr( $hidden ); ?>">
 		<?php skc_post_lock_notice_text( $display_name_role ); ?>
 	</div>
@@ -166,7 +166,7 @@ function skc_post_lock_frontend_notice( $post_id ) {
 	<input type="hidden" id="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'heartbeat-nonce' ) ); ?>" />
 	<input type="hidden" id="post_ID" value="<?php echo esc_attr( $post_id ); ?>" />
 	<input type="hidden" id="active_post_lock" value="<?php echo esc_attr( implode( ':', $active_post_lock ) ); ?>" />
-<?php
+	<?php
 
 	return $is_locked;
 
@@ -192,11 +192,11 @@ function skc_post_lock_frontend_list_notice( $post_id ) {
 
 	if ( false !== $display_name_role ) {
 		$is_locked = true;
-?>
-	<div class="post-lock-list-dialog">
-		<?php skc_post_lock_notice_text( $display_name_role ); ?>
-	</div>
-<?php
+		?>
+		<div class="post-lock-list-dialog">
+			<?php skc_post_lock_notice_text( $display_name_role ); ?>
+		</div>
+		<?php
 	}
 
 	return $is_locked;
