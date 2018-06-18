@@ -1,6 +1,8 @@
 # Post Locking for Frontend
 Drop-in post locking for WordPress on the frontend
 
+This plugin works for Pods, ACF, and Gravity Forms out of the box.
+
 ## Example (singular)
 
 ```php
@@ -78,3 +80,4 @@ add_filter( 'skc_post_locking_display_name_role', function( $display_name_role, 
 ## What's next
 
 * AJAX loading of post locking status for list notices (`skc_post_lock_frontend_list_notice( $post_id )`)
+* Trigger an event with JS on `$(document)` so that someone can trigger a lock/unlock action for another form provider
