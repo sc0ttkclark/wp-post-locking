@@ -35,26 +35,70 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 function skc_post_lock_add_display_name_role( $response, $data, $screen_id ) {
 
+	// Handle post locking on singular.
 	if ( ! empty( $response['wp-refresh-post-lock']['lock_error'] ) ) {
-		$post_id = absint( $data['wp-refresh-post-lock']['post_id'] );
+		$response_item = $response['wp-refresh-post-lock']['lock_error'];
 
-		$user_id = wp_check_post_lock( $post_id );
+		$post_id = 0;
 
-		if ( ! $user_id ) {
-			return $response;
+		if ( ! empty( $response['wp-refresh-post-lock']['post_id'] ) ) {
+			$post_id = absint( $data['wp-refresh-post-lock']['post_id'] );
 		}
 
-		$display_name_role = skc_post_lock_get_display_name_role( $user_id );
+		$response['wp-refresh-post-lock']['lock_error'] = skc_post_lock_add_display_name_role_to_response( $response_item, $post_id );
+	}
 
-		$response['wp-refresh-post-lock']['lock_error']['display_name'] = esc_html( $display_name_role['display_name'] );
-		$response['wp-refresh-post-lock']['lock_error']['role']         = esc_html( $display_name_role['role'] );
+	// Handle post locking notices on list.
+	if ( ! empty( $response['wp-check-locked-posts'] ) && is_array( $response['wp-check-locked-posts'] ) ) {
+		foreach ( $response['wp-check-locked-posts'] as $key => $response_item ) {
+			$post_id = absint( substr( $key, 5 ) );
+
+			$response['wp-check-locked-posts'][ $key ] = skc_post_lock_add_display_name_role_to_response( $response_item, $post_id );
+		}
 	}
 
 	return $response;
 
 }
 
-add_filter( 'heartbeat_received', 'skc_post_lock_add_display_name_role', 11, 3 );
+add_filter( 'heartbeat_received', 'skc_post_lock_add_display_name_role', 12, 3 );
+
+/**
+ * Add display name and role to responses.
+ *
+ * @param array $response_item Response item.
+ * @param int   $post_id       Post ID.
+ *
+ * @return array Response item with display_name and role set.
+ */
+function skc_post_lock_add_display_name_role_to_response( $response_item, $post_id ) {
+
+	// Set empty defaults.
+	$response_item['display_name'] = '';
+	$response_item['role']         = '';
+
+	if ( ! $post_id ) {
+		return $response_item;
+	}
+
+	$user_id = wp_check_post_lock( $post_id );
+
+	if ( ! $user_id ) {
+		return $response_item;
+	}
+
+	$display_name_role = skc_post_lock_get_display_name_role( $user_id );
+
+	if ( ! $display_name_role ) {
+		return $response_item;
+	}
+
+	$response_item['display_name'] = esc_html( $display_name_role['display_name'] );
+	$response_item['role']         = esc_html( $display_name_role['role'] );
+
+	return $response_item;
+
+}
 
 /**
  * Get Display Name / Role text from user.
@@ -228,7 +272,7 @@ function skc_post_lock_notice_text( $display_name_role ) {
 	$role = '';
 
 	if ( ! empty( $display_name_role['role'] ) ) {
-		$role = sprintf( '(%s)', $display_name_role['role'] ); 
+		$role = sprintf( '(%s)', $display_name_role['role'] );
 	}
 
 	printf(
