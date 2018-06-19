@@ -150,7 +150,7 @@
 	} ).on( 'heartbeat-send.wp-check-locked-posts', function ( e, data ) {
 		var check = [];
 
-		$( '.skc-post-locking-row' ).each( function ( i, el ) {
+		$( '.skc-post-locking-list-dialog' ).each( function ( i, el ) {
 			var row = $( el ),
 				post_id = row.data( 'post-id' ),
 				key = 'post-' + post_id;
