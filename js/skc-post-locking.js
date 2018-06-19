@@ -116,33 +116,34 @@
 	} ).on( 'heartbeat-tick.wp-check-locked-posts', function ( e, data ) {
 		var locked = data['wp-check-locked-posts'] || {};
 
-		$( '.skc-post-locking-row' ).each( function ( i, el ) {
+		$( '.skc-post-locking-list-dialog' ).each( function ( i, el ) {
 			var row = $( el ),
 				post_id = row.data( 'post-id' ),
 				key = 'post-' + post_id,
+				parent_wrapper = row.parent(),
 				lock_error = {};
 
 			if ( ! post_id ) {
 				return;
 			}
 
-			wrap = $( '.skc-post-locking-list-dialog', row );
-
 			if ( locked.hasOwnProperty( key ) ) {
 				lock_error = locked[key];
 
 				// Update the notice.
-				update_notice( received.lock_error, wrap );
+				update_notice( received.lock_error, row );
 
 				// Mark row as locked.
-				row.addClass( 'wp-locked' );
+				if ( ! parent_wrapper.hasClass( 'wp-locked' ) ) {
+					parent_wrapper.addClass( 'wp-locked' );
+				}
 			} else {
 				// Remove the notice.
-				remove_notice( wrap );
+				remove_notice( row );
 
 				// Mark row as not locked.
-				if ( row.hasClass( 'wp-locked' ) ) {
-					row.removeClass( 'wp-locked' );
+				if ( parent_wrapper.hasClass( 'wp-locked' ) ) {
+					parent_wrapper.removeClass( 'wp-locked' );
 				}
 			}
 		} );
