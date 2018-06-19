@@ -218,7 +218,7 @@ function skc_post_lock_frontend_notice( $post_id, $set_lock_if_logged_in = true 
 		}
 	}
 	?>
-	<div id="skc_post_locking_dialog" class="<?php echo esc_attr( $hidden ); ?>">
+	<div id="skc_post_locking_dialog" class="<?php echo esc_attr( $hidden ); ?>" data-post-id="<?php echo esc_attr( $post_id ); ?>">
 		<?php skc_post_lock_notice_text( $display_name_role ); ?>
 	</div>
 
@@ -247,16 +247,20 @@ function skc_post_lock_frontend_list_notice( $post_id ) {
 	// Get the display name / role for post lock (if there is one).
 	$display_name_role = skc_post_lock_get_display_name_role_from_post( $post_id );
 
+	$hidden = 'hidden';
+
 	$is_locked = false;
 
 	if ( false !== $display_name_role ) {
+		$hidden = '';
+
 		$is_locked = true;
-		?>
-		<div class="skc-post-locking-list-dialog">
-			<?php skc_post_lock_notice_text( $display_name_role ); ?>
-		</div>
-		<?php
 	}
+	?>
+	<div class="skc-post-locking-list-dialog" class="<?php echo esc_attr( $hidden ); ?>" data-post-id="<?php echo esc_attr( $post_id ); ?>">
+		<?php skc_post_lock_notice_text( $display_name_role ); ?>
+	</div>
+	<?php
 
 	return $is_locked;
 
