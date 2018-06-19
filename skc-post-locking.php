@@ -175,14 +175,9 @@ function skc_post_lock_get_display_name_role_from_post( $post_id ) {
 }
 
 /**
- * Render the post locking frontend notice.
- *
- * @param int  $post_id               Post ID.
- * @param bool $set_lock_if_logged_in Whether to set the lock as active if the user is logged in.
- *
- * @return bool Whether the post is currenty locked by another user.
+ * Init the post locking JS and include the necessary functions.
  */
-function skc_post_lock_frontend_notice( $post_id, $set_lock_if_logged_in = true ) {
+function skc_post_lock_frontend_init() {
 
 	wp_register_script( 'skc-post-locking', plugins_url( 'js/skc-post-locking.js', __FILE__ ), array( 'jquery' ), '1.0', true );
 	wp_enqueue_script( 'skc-post-locking' );
@@ -193,6 +188,21 @@ function skc_post_lock_frontend_notice( $post_id, $set_lock_if_logged_in = true 
 	require_once ABSPATH . 'wp-admin/includes/post.php';
 	require_once ABSPATH . 'wp-admin/includes/misc.php';
 	require_once ABSPATH . 'wp-admin/includes/admin-filters.php';
+
+}
+
+/**
+ * Render the post locking frontend notice.
+ *
+ * @param int  $post_id               Post ID.
+ * @param bool $set_lock_if_logged_in Whether to set the lock as active if the user is logged in.
+ *
+ * @return bool Whether the post is currenty locked by another user.
+ */
+function skc_post_lock_frontend_notice( $post_id, $set_lock_if_logged_in = true ) {
+
+	// Init what we need.
+	skc_post_lock_frontend_init();
 
 	// Get the display name / role for post lock (if there is one).
 	$display_name_role = skc_post_lock_get_display_name_role_from_post( $post_id );
@@ -240,14 +250,13 @@ function skc_post_lock_frontend_notice( $post_id, $set_lock_if_logged_in = true 
  */
 function skc_post_lock_frontend_list_notice( $post_id ) {
 
-	// Include necessary files.
-	require_once ABSPATH . 'wp-admin/includes/post.php';
-	require_once ABSPATH . 'wp-admin/includes/misc.php';
+	// Init what we need.
+	skc_post_lock_frontend_init();
 
 	// Get the display name / role for post lock (if there is one).
 	$display_name_role = skc_post_lock_get_display_name_role_from_post( $post_id );
 
-	$hidden = 'hidden';
+	$hidden = ' hidden';
 
 	$is_locked = false;
 
@@ -257,7 +266,7 @@ function skc_post_lock_frontend_list_notice( $post_id ) {
 		$is_locked = true;
 	}
 	?>
-	<div class="skc-post-locking-list-dialog" class="<?php echo esc_attr( $hidden ); ?>" data-post-id="<?php echo esc_attr( $post_id ); ?>">
+	<div class="skc-post-locking-list-dialog<?php echo esc_attr( $hidden ); ?>" data-post-id="<?php echo esc_attr( $post_id ); ?>">
 		<?php skc_post_lock_notice_text( $display_name_role ); ?>
 	</div>
 	<?php
