@@ -61,6 +61,8 @@ The notice will be displayed that someone else has control already.
 
 If you are using the form on the singular page and someone else takes control from the WP Dashboard area (/wp-admin/), the notice will be displayed within 15 seconds and the form will be hidden from view.
 
+If you are using the integration on a list view and someone else takes control of a post, the notice will be displayed within 15 seconds.
+
 ### Can I filter what text is shown for the display name or role?
 
 Yes! Just add a filter on 
@@ -79,5 +81,4 @@ add_filter( 'skc_post_locking_display_name_role', function( $display_name_role, 
 
 ## What's next
 
-* AJAX loading of post locking status for list notices (`skc_post_lock_frontend_list_notice( $post_id )`)
 * Trigger an event with JS on `$(document)` so that someone can trigger a lock/unlock action for another form provider
