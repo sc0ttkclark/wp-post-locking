@@ -227,7 +227,7 @@ function skc_post_lock_notice_text( $display_name_role ) {
 
 	$role = '';
 
-	if ( ! empty( $display_name_role['role'] ) {
+	if ( ! empty( $display_name_role['role'] ) ) {
 		$role = sprintf( '(%s)', $display_name_role['role'] ); 
 	}
 
