@@ -3,7 +3,7 @@
 Plugin Name: Post Locking for Frontend
 Plugin URI: https://github.com/sc0ttkclark/wp-post-locking
 Description: Drop-in Post Locking for the frontend of WordPress
-Version: 1.0
+Version: 0.1
 Author: Scott Kingsley Clark
 Author URI: https://www.scottkclark.com/
 Text Domain: skc-post-locking
@@ -34,14 +34,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  * @return array The Heartbeat response.
  */
 function skc_post_lock_add_display_name_role( $response, $data, $screen_id ) {
-
 	// Handle post locking on singular.
 	if ( ! empty( $response['wp-refresh-post-lock']['lock_error'] ) ) {
 		$response_item = $response['wp-refresh-post-lock']['lock_error'];
 
 		$post_id = 0;
 
-		if ( ! empty( $response['wp-refresh-post-lock']['post_id'] ) ) {
+		if ( ! empty( $data['wp-refresh-post-lock']['post_id'] ) ) {
 			$post_id = absint( $data['wp-refresh-post-lock']['post_id'] );
 		}
 
@@ -93,8 +92,14 @@ function skc_post_lock_add_display_name_role_to_response( $response_item, $post_
 		return $response_item;
 	}
 
+	$role = '';
+
+	if ( ! empty( $display_name_role['role'] ) ) {
+		$role = sprintf( '(%s)', $display_name_role['role'] );
+	}
+
 	$response_item['display_name'] = esc_html( $display_name_role['display_name'] );
-	$response_item['role']         = esc_html( $display_name_role['role'] );
+	$response_item['role']         = esc_html( $role );
 
 	return $response_item;
 
