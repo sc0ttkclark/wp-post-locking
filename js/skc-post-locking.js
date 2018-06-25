@@ -23,8 +23,8 @@
 		}
 
 		// Set user fields.
-		$( '.skc-post-locking-user-display-name', wrap ).text( received.lock_error.display_name );
-		$( '.skc-post-locking-user-role', wrap ).text( received.lock_error.role );
+		$( '.skc-post-locking-user-display-name', wrap ).text( lock_error.display_name );
+		$( '.skc-post-locking-user-role', wrap ).text( lock_error.role );
 	}
 
 	/**
@@ -74,7 +74,8 @@
 	} ).on( 'heartbeat-tick.refresh-lock', function ( e, data ) {
 		// Post locks: update the lock string or show the dialog if somebody has taken over editing.
 		var received = {},
-			wrap = {};
+			wrap = {},
+			lock_error = {};
 
 		if ( data['wp-refresh-post-lock'] ) {
 			received = data['wp-refresh-post-lock'];
@@ -82,8 +83,10 @@
 			wrap = $( '#skc_post_locking_dialog' );
 
 			if ( received.lock_error ) {
+				lock_error = received.lock_error;
+
 				// Update the notice.
-				update_notice( received.lock_error, wrap );
+				update_notice( lock_error, wrap );
 
 				// Hide ACF form on page.
 				$( '.acf-form' ).addClass( 'hidden skc-post-locking-form-inactive' );
@@ -93,6 +96,11 @@
 
 				// Hide GF form on page.
 				$( '.gform_wrapper' ).addClass( 'hidden skc-post-locking-form-inactive' );
+
+				$( document ).trigger( 'skc-post-locking-single-locked', {
+					wrap: wrap,
+					lock_error: received.lock_error
+				} );
 			}
 			else {
 				if ( received.new_lock ) {
@@ -111,6 +119,11 @@
 
 				// Show GF form on page.
 				$( '.gform_wrapper.skc-post-locking-form-inactive' ).removeClass( 'hidden skc-post-locking-form-inactive' );
+
+				// Trigger event.
+				$( document ).trigger( 'skc-post-locking-single-unlocked', {
+					wrap: wrap
+				} );
 			}
 		}
 	} ).on( 'heartbeat-tick.wp-check-locked-posts', function ( e, data ) {
@@ -131,12 +144,19 @@
 				lock_error = locked[key];
 
 				// Update the notice.
-				update_notice( received.lock_error, row );
+				update_notice( lock_error, row );
 
 				// Mark row as locked.
 				if ( ! parent_wrapper.hasClass( 'wp-locked' ) ) {
 					parent_wrapper.addClass( 'wp-locked' );
 				}
+
+				// Trigger event.
+				$( document ).trigger( 'skc-post-locking-list-locked', {
+					lock_error: lock_error,
+					row: row,
+					parent: parent_wrapper
+				} );
 			} else {
 				// Remove the notice.
 				remove_notice( row );
@@ -145,6 +165,12 @@
 				if ( parent_wrapper.hasClass( 'wp-locked' ) ) {
 					parent_wrapper.removeClass( 'wp-locked' );
 				}
+
+				// Trigger event.
+				$( document ).trigger( 'skc-post-locking-list-unlocked', {
+					row: row,
+					parent: parent_wrapper
+				} );
 			}
 		} );
 	} ).on( 'heartbeat-send.wp-check-locked-posts', function ( e, data ) {
